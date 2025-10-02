@@ -6,7 +6,14 @@ RUN mkdir /app
 
 # Set the working directory inside the container
 WORKDIR /app
- 
+
+# Create a new group
+RUN addgroup -S defaultgroup && \
+    adduser -S -G defaultgroup fulano
+
+# Sets the user
+USER fulano
+
 # Set environment variables 
 # Prevents Python from writing pyc files to disk
 ENV PYTHONDONTWRITEBYTECODE=1
