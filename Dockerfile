@@ -1,15 +1,18 @@
 # Use the official Python runtime image
 FROM python:3.13-alpine3.22  
 
+# Create the app directory
+RUN mkdir /app
+
 # Create a new group
 RUN addgroup -S defaultgroup && \
     adduser -S -G defaultgroup fulano
 
+# Set ownership so fulano can write to /app
+RUN chown fulano:defaultgroup /app
+
 # Sets the user
 USER fulano
-
-# Create the app directory
-RUN mkdir /app
 
 # Set the working directory inside the container
 WORKDIR /app
