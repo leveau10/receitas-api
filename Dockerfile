@@ -1,11 +1,5 @@
 # Use the official Python runtime image
 FROM python:3.13-alpine3.22  
- 
-# Create the app directory
-RUN mkdir /app
-
-# Set the working directory inside the container
-WORKDIR /app
 
 # Create a new group
 RUN addgroup -S defaultgroup && \
@@ -13,6 +7,12 @@ RUN addgroup -S defaultgroup && \
 
 # Sets the user
 USER fulano
+
+# Create the app directory
+RUN mkdir /app
+
+# Set the working directory inside the container
+WORKDIR /app
 
 # Set environment variables 
 # Prevents Python from writing pyc files to disk
