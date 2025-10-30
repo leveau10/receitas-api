@@ -27,6 +27,22 @@ jobs:
           name: dependency-check-report
           path: dependency-check-report/dependency-check-report.html
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 flake8-deprecated
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Check for deprecated code
+        run: |
+          flake8 . --select=DP --exclude=migrations,venv,__pycache__
+        continue-on-error: false
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
