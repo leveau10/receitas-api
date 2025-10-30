@@ -21,6 +21,12 @@ jobs:
           format: "HTML"
           out: "dependency-check-report"
 
+      - name: Upload Dependency Check report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-check-report
+          path: dependency-check-report/dependency-check-report.html
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
