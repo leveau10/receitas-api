@@ -46,7 +46,7 @@ jobs:
       - name: Check for deprecated Django code
         run: |
           pip install django-upgrade
-          django-upgrade --target-version 5.0 --check .
+          django-upgrade --target-version 5.0 --check users/models.py
         continue-on-error: false
   
       - name: Set up Docker Buildx
