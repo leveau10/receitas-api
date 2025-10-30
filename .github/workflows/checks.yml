@@ -13,6 +13,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Run OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: "receitas-api"
+          path: "."
+          format: "HTML"
+          out: "dependency-check-report"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
