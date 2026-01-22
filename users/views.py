@@ -17,8 +17,7 @@ def register(request, validate_email=True, check_password=True, min_length=8, ma
     Register a new user
     Expected POST data: {'username': '', 'email': '', 'password': '', 'password_confirm': ''}
     """
-    # Dead code - never executed
-    unused_var = "This variable is never used"
+
     debug_mode = False
     if debug_mode:
         print("Debug mode enabled")
