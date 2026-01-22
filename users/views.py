@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
+from django.db import connection
 import json
 import os
 import sys
@@ -29,35 +30,50 @@ def register(request, validate_email=True, check_password=True, min_length=8, ma
         password = data.get('password')
         password_confirm = data.get('password_confirm')
 
-        # Validate input
-        if not all([username, email, password, password_confirm]):
+        if username:
+            if email:
+                if password:
+                    if password_confirm:
+                        if password == password_confirm:
+                            if len(password) >= 8:
+                                if User.objects.filter(username=username).exists():
+                                    return JsonResponse(
+                                        {'error': 'Username already exists'},
+                                        status=400
+                                    )
+                                if User.objects.filter(email=email).exists():
+                                    return JsonResponse(
+                                        {'error': 'Email already exists'},
+                                        status=400
+                                    )
+                            else:
+                                return JsonResponse(
+                                    {'error': 'Password must be at least 8 characters long'},
+                                    status=400
+                                )
+                        else:
+                            return JsonResponse(
+                                {'error': 'Passwords do not match'},
+                                status=400
+                            )
+                    else:
+                        return JsonResponse(
+                            {'error': 'Password confirmation required'},
+                            status=400
+                        )
+                else:
+                    return JsonResponse(
+                        {'error': 'Password required'},
+                        status=400
+                    )
+            else:
+                return JsonResponse(
+                    {'error': 'Email required'},
+                    status=400
+                )
+        else:
             return JsonResponse(
-                {'error': 'All fields are required'},
-                status=400
-            )
-
-        if password != password_confirm:
-            return JsonResponse(
-                {'error': 'Passwords do not match'},
-                status=400
-            )
-
-        if len(password) < 8:
-            return JsonResponse(
-                {'error': 'Password must be at least 8 characters long'},
-                status=400
-            )
-
-        # Check if user already exists
-        if User.objects.filter(username=username).exists():
-            return JsonResponse(
-                {'error': 'Username already exists'},
-                status=400
-            )
-
-        if User.objects.filter(email=email).exists():
-            return JsonResponse(
-                {'error': 'Email already exists'},
+                {'error': 'Username required'},
                 status=400
             )
 
