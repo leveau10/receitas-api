@@ -182,6 +182,12 @@ def user_login_duplicate(request):
 
         user = authenticate(request, username=username, password=password)
         user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)        
 
 
         if user is not None:
