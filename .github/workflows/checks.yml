@@ -38,6 +38,12 @@ jobs:
           pip install -r requirements.txt
           pip install flake8 flake8-deprecated
 
+      - name: Run Bandit (Security Analysis)
+        run: |
+          bandit -r . -f json -o bandit-report.json
+          bandit -r . --exit-zero
+        continue-on-error: false
+
       - name: Check for deprecated code
         run: |
           flake8 . --select=DP --show-source
@@ -48,7 +54,15 @@ jobs:
           pip install django-upgrade
           django-upgrade --target-version 5.0 --check .
         continue-on-error: true
-  
+
+      - name: Upload Reports
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: static-analysis-reports
+          path: |
+            bandit-report.json
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
