@@ -10,8 +10,8 @@ services:
       - .:/app
     expose:
       - "8002"
-    env_file:
-      - .env
+    # env_file:
+    #   - .env
     depends_on:
       - db
     networks:
