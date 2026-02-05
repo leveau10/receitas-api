@@ -1,42 +1,18 @@
-# Use the official Python runtime image
 FROM python:3.13-alpine3.22  
 
-# Create the app directory
-RUN mkdir /app
-
-# Create a new group
-RUN addgroup -S defaultgroup && \
-    adduser -S -G defaultgroup fulano
-
-# Set ownership so fulano can write to /app
-RUN chown fulano:defaultgroup /app
-
-# Sets the user
-USER fulano
-
-# Set the working directory inside the container
 WORKDIR /app
 
-# Set environment variables 
-# Prevents Python from writing pyc files to disk
 ENV PYTHONDONTWRITEBYTECODE=1
-#Prevents Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED=1 
  
-# Upgrade pip
 RUN pip install --upgrade pip 
  
-# Copy the Django project  and install dependencies
-COPY requirements.txt  /app/
- 
-# run this command to install all dependencies 
+COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
  
-# Copy the Django project to the container
 COPY . /app/
  
-# Expose the Django port
-EXPOSE 8000
+EXPOSE 8002
  
-# Run Django’s development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Run as root (simpler for development)
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8002"]

@@ -3,16 +3,20 @@ services:
     build: .
     container_name: receitas-api
     command: >
-      sh -c "python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8002"
     volumes:
       - .:/app
-    ports:
-      - "8000:8000"
-    # env_file:
-    #   - .env
+    expose:
+      - "8002"
+    env_file:
+      - .env
     depends_on:
       - db
+    networks:
+      - app-network
+
   db:
     image: postgres:13-alpine
     container_name: receitas-db
@@ -24,5 +28,26 @@ services:
       - POSTGRES_PASSWORD=receita_password  
     ports:
       - "5432:5432"
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: receitas-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - web
+    networks:
+      - app-network
+
 volumes:
-  postgres_data: 
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
