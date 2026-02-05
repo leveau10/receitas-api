@@ -49,9 +49,13 @@ jobs:
           django-upgrade --target-version 5.0 --check .
         continue-on-error: true
       
-      - name: Run duplicate code check
+      - name: Install lint tools
         run: |
-          bash scripts/check_duplicates.sh
+          pip install flake8 flake8-duplicates
+
+      - name: Check duplicated code
+        run: |
+          flake8 . --select=DPL --show-source
   
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

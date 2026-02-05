@@ -1,0 +1,16 @@
+[flake8]
+max-line-length = 120
+exclude =
+    migrations,
+    venv,
+    .venv,
+    env,
+    node_modules,
+    staticfiles,
+    media
+
+# Enable duplicate detection
+select = DPL
+
+# Minimum duplicated lines
+duplicates-min-length = 5   
