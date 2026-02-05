@@ -8,4 +8,3 @@ flake8
 flake8-deprecated
 pylint==3.0.3
 pylint-django==2.5.5
-flake8-duplicate-code
