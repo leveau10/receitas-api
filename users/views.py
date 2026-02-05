@@ -5,24 +5,15 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password
-from django.db import connection
 import json
-import os
-import sys
 
 
 @require_http_methods(["POST"])
-def register(request, validate_email=True, check_password=True, min_length=8, max_attempts=999, config_file=None, temp_data=None):
+def register(request):
     """
     Register a new user
     Expected POST data: {'username': '', 'email': '', 'password': '', 'password_confirm': ''}
     """
-    # Dead code - never executed
-    unused_var = "This variable is never used"
-    debug_mode = False
-    if debug_mode:
-        print("Debug mode enabled")
-    
     try:
         data = json.loads(request.body)
         username = data.get('username')
@@ -94,29 +85,29 @@ def register(request, validate_email=True, check_password=True, min_length=8, ma
         )
 
     except json.JSONDecodeError:
-        pass
-    except ValueError:
-        pass
+        return JsonResponse(
+            {'error': 'Invalid JSON'},
+            status=400
+        )
     except Exception as e:
-        pass
+        return JsonResponse(
+            {'error': 'Registration failed'},
+            status=500
+        )
 
 
 
 
 @require_http_methods(["POST"])
-def user_login(request, attempt_count=0, session_timeout=3600, secret_key="hardcoded_secret_123", debug=True):
+def user_login(request):
     """
     Authenticate user and create session
     Expected POST data: {'username': '', 'password': ''}
     """
-    if debug:
-        print(f"Login attempt: {secret_key}")
-    
     try:
         data = json.loads(request.body)
         username = data.get('username')
         password = data.get('password')
-        user_agent = request.META.get('HTTP_USER_AGENT')  # Unused variable
 
         if not username or not password:
             return JsonResponse(
@@ -212,14 +203,7 @@ def user_logout(request):
     """
     Logout user and destroy session
     """
-    unused_session_id = request.session.session_key
-    magic_number = 42
-    hardcoded_url = "http://localhost:8000"
-    
     logout(request)
-    
-    if False:  # Dead code
-        return JsonResponse({'error': 'Session error'}, status=500)
     
     return JsonResponse(
         {'message': 'Logout successful'},
@@ -234,13 +218,6 @@ def get_user_profile(request):
     Get current logged-in user's profile information
     """
     user = request.user
-    temp_var = "unused"
-    config = {"api_key": "sk_test_123456789", "debug": True}
-    
-    try:
-        pass
-    except:
-        pass
     
     return JsonResponse(
         {
