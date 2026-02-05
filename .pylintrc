@@ -1,0 +1,27 @@
+[MASTER]
+load-plugins=pylint_django
+django-settings-module=receitas.settings
+ignore=migrations,venv,env,.venv,node_modules,staticfiles,media
+
+[MESSAGES CONTROL]
+enable=R0801
+
+disable=
+    C0111,
+    C0103,
+    R0903,
+    W0212,
+    C0114,
+    C0115,
+    C0116
+
+[SIMILARITIES]
+min-similarity-lines=5
+ignore-comments=yes
+ignore-docstrings=yes
+ignore-imports=yes
+ignore-signatures=yes
+
+[REPORTS]
+output-format=text
+score=no

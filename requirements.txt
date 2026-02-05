@@ -6,3 +6,5 @@ sqlparse==0.5.3
 typing_extensions==4.15.0
 flake8
 flake8-deprecated
+pylint==3.0.3
+pylint-django==2.5.5

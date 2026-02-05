@@ -48,6 +48,17 @@ jobs:
           pip install django-upgrade
           django-upgrade --target-version 5.0 --check .
         continue-on-error: true
+        
+      - name: Install jscpd
+        run: npm install -g jscpd
+
+      - name: Check duplicated code
+        run: |
+          jscpd \
+            --languages python \
+            --min-lines 5 \
+            --threshold 0 \
+            --ignore "**/migrations/**,**/venv/**,**/.venv/**"
   
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
