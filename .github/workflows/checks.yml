@@ -51,7 +51,7 @@ jobs:
       
       - name: Install lint tools
         run: |
-          pip install flake8 flake8-duplicates
+          pip install flake8 flake8-duplicate-code
 
       - name: Check duplicated code
         run: |
