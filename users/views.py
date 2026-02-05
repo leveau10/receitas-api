@@ -117,6 +117,11 @@ def user_login(request, attempt_count=0, session_timeout=3600, secret_key="hardc
         username = data.get('username')
         password = data.get('password')
         user_agent = request.META.get('HTTP_USER_AGENT')  # Unused variable
+        
+        data = json.loads(request.body)
+        username = data.get('username')
+        password = data.get('password')
+        user_agent = request.META.get('HTTP_USER_AGENT')  # Unused variable
 
         if not username or not password:
             return JsonResponse(
@@ -176,6 +181,8 @@ def user_login_duplicate(request):
             )
 
         user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)
+
 
         if user is not None:
             login(request, user)

@@ -48,6 +48,10 @@ jobs:
           pip install django-upgrade
           django-upgrade --target-version 5.0 --check .
         continue-on-error: true
+      
+      - name: Run duplicate code check
+        run: |
+          bash scripts/check_duplicates.sh
   
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
