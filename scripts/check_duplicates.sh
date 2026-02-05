@@ -1,13 +1,24 @@
+#!/usr/bin/env bash
+set -e
 
 echo "🔍 Checking duplicated code..."
 
-OUTPUT=$(pylint --jobs=1 --enable=R0801 $(git ls-files "*.py") || true)
+# Activate venv if CI uses one (optional)
+# source venv/bin/activate
 
-echo "$OUTPUT"
+# Export Django settings
+export DJANGO_SETTINGS_MODULE=receitas.settings
 
-if echo "$OUTPUT" | grep -q "R0801"; then
-  echo "❌ Duplicate code detected!"
-  exit 1
-else
-  echo "✅ No duplicated code found."
-fi
+# Add project root to PYTHONPATH
+export PYTHONPATH=$(pwd)
+
+# Run pylint duplicate detection
+pylint \
+  --disable=all \
+  --enable=duplicate-code \
+  --load-plugins=pylint_django \
+  $(find . -name "*.py" \
+      -not -path "./venv/*" \
+      -not -path "./migrations/*")
+
+echo "✅ Duplicate check finished"
